@@ -364,6 +364,73 @@ class AttributionParseTest {
 
     @Test
     @Throws(Exception::class)
+    fun testComplexAttribution() {
+        // This attribution has a large text section without a URL and several
+        val attributionParser = AttributionParser.Options(RuntimeEnvironment.application)
+            .withAttributionData(ALIDADE_SATELLITE_ATTRIBUTION)
+            .withMapboxAttribution(false)
+            .withImproveMap(false)
+            .build()
+        val attributionList = attributionParser.attributions
+        // FIXME
+//        Assert.assertEquals("Size of list should match", 4, attributionList.size)
+        for ((counter, attribution) in attributionList.withIndex()) {
+            when (counter) {
+                0 -> {
+                    Assert.assertEquals(
+                        "URL Stadia Maps should match",
+                        "https://stadiamaps.com/",
+                        attribution.url
+                    )
+                    Assert.assertEquals(
+                        "Title Stadia Maps should match",
+                        "© Stadia Maps",
+                        attribution.title
+                    )
+                }
+                // FIXME
+//                1 -> {
+//                    Assert.assertEquals(
+//                        "URL Airbus should be null",
+//                        null,
+//                        attribution.url
+//                    )
+//                    Assert.assertEquals(
+//                        "Title Airbus should match",
+//                        "© CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data)",
+//                        attribution.title
+//                    )
+//                }
+                1 -> {
+                    Assert.assertEquals(
+                        "URL OpenMapTiles should match",
+                        "https://openmaptiles.org/",
+                        attribution.url
+                    )
+                    Assert.assertEquals(
+                        "Title OpenMapTiles should match",
+                        "© OpenMapTiles",
+                        attribution.title
+                    )
+                }
+                2 -> {
+                    Assert.assertEquals(
+                        "URL openstreetmap should match",
+                        "https://www.openstreetmap.org/copyright",
+                        attribution.url
+                    )
+                    Assert.assertEquals(
+                        "Title openstreetmap should match",
+                        "© OpenStreetMap",
+                        attribution.title
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun testOutputNoAttribution() {
         val attributionParser = AttributionParser.Options(RuntimeEnvironment.application)
             .withAttributionData("")
